@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-backend-dep
+  labels:
+    day: day3
+    sample: dbapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      day: day3
+      sample: dbapp
+      layer: backend
+  template:
+    metadata:
+      labels:
+        day: day3
+        sample: dbapp
+        layer: backend
+    spec:
+      volumes:
+        - name: dbvol
+          persistentVolumeClaim:
+            claimName: db-pvc
+      containers:
+        - name: db
+          image: postgres:alpine
+          volumeMounts:
+            - name: dbvol
+              mountPath: /var/lib/postgresql/data
+          env:
+            - name: POSTGRES_USER
+              value: admin
+            - name: POSTGRES_PASSWORD
+              value: something
+                     
+    
